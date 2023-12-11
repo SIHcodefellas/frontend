@@ -1,124 +1,94 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  Animated,
-  TouchableOpacity,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Homepage from "./Homepage";
-const StartingPage = () => {
-  const [currentImage, setCurrentImage] = useState(require("./img.png"));
-  const navigation = useNavigation();
-  const [displayText, setDisplayText] = useState(
-    "Empowering You for a Better Tomorrow..."
-  );
-  const fadeAnimation = new Animated.Value(1);
-  const [showButton, setShowButton] = useState(false);
+// Import necessary React and React Native components
+import React from 'react';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import LoginPage from './LoginPage';
+const StartingPage = ({ navigation }) => {
+    // Function to navigate to the selected user type screen
+    const navigateToUserType = (userType) => {
+        navigation.navigate('LoginPage', { userType });
+    };
 
-  useEffect(() => {
-    const changeImageTimeout = setTimeout(() => {
-      let nextImage, nextText;
+    return (
+        <View style={styles.container}>
+            <Text style={styles.heading}>Select Your Role:</Text>
 
-      if (currentImage === require("./img.png")) {
-        nextImage = require("./img2.png");
-        nextText = "Empowering You for a Better Tomorrow...";
-      } else if (currentImage === require("./img2.png")) {
-        nextImage = require("./img3.png");
-        nextText = "Reuniting Hearts, One Moment at a Time...";
-      } else if (currentImage === require("./img3.png")) {
-        nextImage = require("./img4.png");
-        nextText = "Each Moment is a Step Toward Renewal...";
-      } else {
-        // Display the button after the fourth image
-        setShowButton(true);
-        return;
-      }
+            {/* Undertrial Prisoners */}
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigateToUserType('UndertrialPrisoners')}
+            >
+                <Text style={styles.buttonText}>Undertrial Prisoner</Text>
+            </TouchableOpacity>
 
-      Animated.timing(fadeAnimation, {
-        toValue: 0,
-        duration: 5000, // Faster fade-out animation (adjust as needed)
-        useNativeDriver: false,
-      }).start(() => {
-        setCurrentImage(nextImage);
-        setDisplayText(nextText);
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigateToUserType('ProBonoLawyers')}
+            >
+                <Text style={styles.buttonText}>ProBono Lawyer</Text>
+            </TouchableOpacity>
 
-        Animated.timing(fadeAnimation, {
-          toValue: 1,
-          duration: 550, // Faster fade-in animation (adjust as needed)
-          useNativeDriver: false,
-        }).start();
-      });
-    }, 500); // Change image every 8 seconds (adjust as needed)
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigateToUserType('Lawyers')}
+            >
+                <Text style={styles.buttonText}>Lawyer</Text>
+            </TouchableOpacity>
 
-    return () => clearTimeout(changeImageTimeout); // Clear the timeout on component unmount
-  }, [currentImage, fadeAnimation]);
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigateToUserType('Counsellors')}
+            >
+                <Text style={styles.buttonText}>Counsellor</Text>
+            </TouchableOpacity>
 
-  const handleButtonClick = () => {
-    // Add logic for what happens when the button is clicked
-    // For example, you can reset the component state or navigate to a new screen
-    console.log("Button Clicked");
-  };
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigateToUserType('NGOs')}
+            >
+                <Text style={styles.buttonText}>NGO</Text>
+            </TouchableOpacity>
 
-  return (
-    <View style={styles.container}>
-      <Animated.Image
-        source={currentImage}
-        style={[styles.image, { opacity: fadeAnimation }]}
-      />
-      <Animated.Text style={[styles.description, { opacity: fadeAnimation }]}>
-        {displayText}
-      </Animated.Text>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigateToUserType('UndertrialReviewCommittee')}
+            >
+                <Text style={styles.buttonText}>Undertrial Review Committee</Text>
+            </TouchableOpacity>
 
-      {showButton && (
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#B0CCFF" }]}
-          onPress={() => navigation.navigate(Homepage)}
-        >
-          <Text style={styles.buttonText}>Start</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+        </View>
+    );
 };
 
+// Styles
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#B0CCFF",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: 373,
-    height: 311,
-    resizeMode: "contain",
-  },
-  description: {
-    marginTop: 10,
-    fontSize: 15,
-    fontWeight: "700",
-    color: "#044AC8",
-  },
-  button: {
-    position: "absolute",
-    bottom: 80,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    Color: "#42ADE2",
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "1A3567",
-    borderWidth: 1,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#1A3567",
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#B0CCFF',
+    },
+    heading: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color: '#1A3567',
+    },
+    button: {
+        width: '80%',
+        height: 50,
+        borderRadius: 10,
+        marginVertical: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderWidth: 2,
+        borderColor: '#1A3567'
+    },
+    buttonText: {
+        color: '#1A3567',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
 
 export default StartingPage;
