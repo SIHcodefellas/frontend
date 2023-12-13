@@ -10,8 +10,6 @@ import {
   FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import ngo1 from "./ngo1.png";
-import ngo2 from "./ngo2.png";
 import { useNavigation } from "@react-navigation/native";
 import Menu from "./Menu";
 import NotificationPage from "./NotificationPage";
@@ -19,8 +17,13 @@ import Wellbeing from "./Wellbeing";
 import Dashboard from "./Dashboard";
 import Homepage from "./Homepage";
 import Study from "./Study";
-import Ngo from "./ngo";
+import Ngo from "./Ngo";
 import CaseId from "./CaseId";
+
+const ngo1 = require("./ngo1.png");
+
+const ngo2 = require("./ngo2.png");
+
 const CategorySelector = ({ categories, onPressCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 

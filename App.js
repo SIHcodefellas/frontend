@@ -23,6 +23,14 @@ import StartingPage from "./screens/StartingPage";
 import Ngo from "./screens/Ngo";
 import CommentScreen from "./screens/CommentScreen";
 import CaseId from "./screens/CaseId";
+import LawyerRegistration from "./screens/LawyerRegistration";
+import NGORegistration from "./screens/LawyerRegistration";
+import LoginPage from "./screens/LoginPage";
+import ProBonoRegistration from "./screens/ProBonoRegistration";
+import UTPRegistration from "./screens/UTPRegistration";
+
+import CounsellorRegistration from "./screens/CounsellorRegistration";
+import Animation from "./screens/Animation";
 const Stack = createStackNavigator();
 
 //mport CourseDetails from "./components/CourseDetails";
@@ -31,7 +39,20 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Animation" component={Animation} />
         <Stack.Screen name="StartingPage" component={StartingPage} />
+        <Stack.Screen
+          name="LawyerRegistration"
+          component={LawyerRegistration}
+        />
+        <Stack.Screen
+          name="CouncellorRegistration"
+          component={CounsellorRegistration}
+        />
+        <Stack.Screen name="LoginPage" component={LoginPage} />
+        <Stack.Screen name="NgoRegistration" component={NGORegistration} />
+        <Stack.Screen name="UTPRegistration" component={UTPRegistration} />
+
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="Wellbeing" component={Wellbeing} />
         <Stack.Screen name="Thoughts" component={Thoughts} />
