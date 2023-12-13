@@ -46,7 +46,7 @@ const App = () => {
           component={LawyerRegistration}
         />
         <Stack.Screen
-          name="CouncellorRegistration"
+          name="CounsellorRegistration"
           component={CounsellorRegistration}
         />
         <Stack.Screen name="LoginPage" component={LoginPage} />

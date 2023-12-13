@@ -36,7 +36,7 @@ const LawyerRegistration = () => {
       .then((res) => console.log(res))
       .catch((err) => console.log("error", err));
     axios
-      .post("http://192.168.1.215:3001/userProfile ", {
+      .post("http://192.168.1.215:3001/userProfile", {
         name: Name,
         specialization: expertise,
         experience: experience,

@@ -29,6 +29,44 @@ db.once("open", () => {
 
 const lawyerSchema = new mongoose.Schema({
   // Define your Lawyer schema fields here
+  name: {
+    type: String,
+    required: true,
+  },
+  specialization: {
+    type: String,
+    required: true,
+  },
+  experience: {
+    type: Number,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  meetLink: {
+    type: String,
+  },
+  AOR: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+  },
+  phoneNumber: {
+    type: String,
+  },
+  passWord: {
+    type: String,
+    required: true,
+  },
+  confirmpassWord: {
+    type: String,
+    required: true,
+  },
 });
 
 const LawyerModel = mongoose.model("User", lawyerSchema);
@@ -73,10 +111,42 @@ app.post("/userProfile", async (req, res) => {
 // Define UTP schema outside the route handler
 const utpSchema = new mongoose.Schema({
   // Define your UTP schema fields here
+  caseID: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  setPassword: {
+    type: String,
+    required: true,
+  },
+  confirmPassWord: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  contactNumber: {
+    type: String,
+  },
+  location: {
+    type: String,
+  },
+  lawyerName: {
+    type: String,
+  },
+  offence: {
+    type: String,
+  },
 });
 
 const UTPModel = mongoose.model("UTP", utpSchema);
-
 app.post("/utpProfile", async (req, res) => {
   try {
     const {
@@ -108,6 +178,70 @@ app.post("/utpProfile", async (req, res) => {
     res.send("ok");
   } catch (error) {
     console.error("Error inserting UTP data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//counselor
+const counselorSchema = new mongoose.Schema({
+  ncsID: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  experience: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  passWord: {
+    type: String,
+    required: true,
+  },
+  confirmpassWord: {
+    type: String,
+    required: true,
+  },
+  contactNumber: {
+    type: String,
+  },
+  location: {
+    type: String,
+  },
+});
+const CounselorModel = mongoose.model("Counselor", counselorSchema);
+
+app.post("/counselorProfile", async (req, res) => {
+  try {
+    const {
+      ncsID,
+      experience,
+      email,
+      passWord,
+      confirmpassWord,
+      contactNumber,
+      location,
+    } = req.body;
+
+    const counselor = new CounselorModel({
+      ncsID,
+      experience,
+      email,
+      passWord,
+      confirmpassWord,
+      contactNumber,
+      location,
+    });
+
+    await counselor.save();
+    console.log("Inserted Counselor data");
+    res.send("ok");
+  } catch (error) {
+    console.error("Error inserting Counselor data:", error);
     res.status(500).send("Internal Server Error");
   }
 });
