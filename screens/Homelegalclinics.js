@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -19,9 +19,11 @@ import Wellbeing from "./Wellbeing";
 import Study from "./Study";
 import Dashboard from "./Dashboard";
 import Homepage from "./Homepage";
+import axios from "axios";
 import CaseId from "./CaseId";
 const CategorySelector = ({ categories, onPressCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [legalClinics, setLegalClinics] = useState([]);
 
   return (
     <FlatList
@@ -43,12 +45,31 @@ const CategorySelector = ({ categories, onPressCategory }) => {
     />
   );
 };
-const Homelegalclinics = () => {
-  const navigation = useNavigation();
+const Homelegalclinics = ({ route }) => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [legalClinics, setLegalClinics] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchLegalClinics = async () => {
+      try {
+        const response = await axios.get(
+          "http://192.168.1.215:3001/legalProfile"
+        );
+        setLegalClinics(response.data); // Adjust the key if needed
+      } catch (error) {
+        console.error("Error fetching legal clinics:", error);
+      }
+    };
+
+    fetchLegalClinics();
+  }, []);
 
   const handleCategoryPress = (item) => {
     // Check if the item has a page property
+    setSelectedCategory(item.id);
+
     if (item.page) {
       // Navigate to the specified page
       navigation.navigate(item.page);
@@ -56,7 +77,7 @@ const Homelegalclinics = () => {
       // Handle other logic if needed
     }
   };
-  // Function to toggle the visibility of the menu
+
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -120,59 +141,35 @@ const Homelegalclinics = () => {
         <View style={styles.content}>
           <View style={styles.profileCardContainer}>
             {/* Profile Card 1 */}
-            <View style={styles.profileCard}>
-              <Text style={styles.lawyername}>National Law School</Text>
-              <Image
-                style={styles.profileCardImage}
-                source={LC1}
-                alt="Image placeholder"
-              />
-              <View style={styles.buttonContainer}>
+            {legalClinics.map((legals) => (
+              <TouchableOpacity
+                style={[styles.button, styles.border]}
+                key={legals.id}
+              >
+                <Text style={styles.lawyername}>{legals.name}</Text>
+                <Image
+                  style={styles.profileCardImage}
+                  source={LC1}
+                  alt="Image placeholder"
+                />
+                <Text style={[styles.boldText, styles.legalclinicText]}>
+                  📍 Location:
+                </Text>
+                <Text style={[styles.semiBoldText, styles.legalclinicText]}>
+                  {legals.location}
+                </Text>
+                <Text style={[styles.legalclinicText, styles.boldText]}>
+                  🕐 Operational Hours:
+                </Text>
+                <Text style={[styles.legalclinicText, styles.semiBoldText]}>
+                  {legals.operationalHours}
+                </Text>
+                {/* Add more information as needed */}
                 <TouchableOpacity style={styles.button}>
-                  <Text style={[styles.boldText, styles.lawyerText]}>
-                    Years of Experience:
-                  </Text>
-                  <Text style={styles.semiBoldText}>22</Text>
-                  <Text style={[styles.boldText, styles.lawyerText]}>
-                    Subject Matter Expertise:
-                  </Text>
-                  <Text style={styles.semiBoldText}>Criminal Cases</Text>
-                  <Text style={[styles.boldText, styles.lawyerText]}>
-                    Sucess Rate:
-                  </Text>
-                  <Text style={styles.semiBoldText}>70%</Text>
-                  <Text style={styles.legalclinicText}>Success Rate: 70%</Text>
+                  <Text style={styles.buttonText}>Book Appointment</Text>
                 </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Profile Card 2 */}
-            <View style={styles.profileCard}>
-              <Text style={styles.lawyername}>KLSA</Text>
-              <Image
-                style={styles.profileCardImage}
-                source={LC2}
-                alt="Image placeholder"
-              />
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={[styles.boldText, styles.lawyerText]}>
-                    Years of Experience:
-                  </Text>
-                  <Text style={styles.semiBoldText}>22</Text>
-                  <Text style={[styles.boldText, styles.lawyerText]}>
-                    Subject Matter Expertise:
-                  </Text>
-                  <Text style={styles.semiBoldText}>Criminal Cases</Text>
-                  <Text style={[styles.boldText, styles.lawyerText]}>
-                    Sucess Rate:
-                  </Text>
-                  <Text style={styles.semiBoldText}>90%</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            {/* Rest of your content */}
-            {/* ... */}
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
       </ScrollView>
@@ -194,33 +191,7 @@ const Homelegalclinics = () => {
               <Text style={styles.navLabel}>Home</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(CaseId)}
-              name="apps"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(Study)}
-              name="book"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(Wellbeing)}
-              name="heart"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
+          {/* Add more navigation icons as needed */}
         </View>
       </View>
       {menuVisible && (
@@ -234,6 +205,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#B0CCFF",
+  },
+  border: {
+    borderColor: "#1A3567",
+    borderWidth: 2,
+    marginTop: 10,
   },
   boldText: {
     fontWeight: "bold",

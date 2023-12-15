@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import StartingPage from "./StartingPage";
+import LoginPage from "./LoginPage";
+import ProfilePage from "./ProfilePage";
 const Animation = () => {
   const [currentImage, setCurrentImage] = useState(require("./img.png"));
   const navigation = useNavigation();
@@ -39,7 +41,7 @@ const Animation = () => {
 
       Animated.timing(fadeAnimation, {
         toValue: 0,
-        duration: 5000, // Faster fade-out animation (adjust as needed)
+        duration: 50, // Faster fade-out animation (adjust as needed)
         useNativeDriver: false,
       }).start(() => {
         setCurrentImage(nextImage);
@@ -75,7 +77,7 @@ const Animation = () => {
       {showButton && (
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "#B0CCFF" }]}
-          onPress={() => navigation.navigate(StartingPage)}
+          onPress={() => navigation.navigate(ProfilePage)}
         >
           <Text style={styles.buttonText}>Start</Text>
         </TouchableOpacity>

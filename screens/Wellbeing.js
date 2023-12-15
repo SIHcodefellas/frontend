@@ -21,6 +21,7 @@ const meditate2 = require("./meditate2.png");
 import Homepage from "./Homepage";
 import Study from "./Study";
 import Dashboard from "./Dashboard";
+import NotificationPage from "./NotificationPage";
 
 const SquareSection = ({ image, text }) => {
   return (
@@ -95,6 +96,7 @@ const Wellbeing = () => {
           style={[styles.icon, { marginTop: 30 }]}
         />
         <Ionicons
+          onPress={() => navigation.navigate(NotificationPage)}
           name="notifications-outline"
           size={30}
           color="black"

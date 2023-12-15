@@ -11,11 +11,12 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import LawyerHomepage from "./LawyerHomepage";
 
 const LawyerRegistration = () => {
   const [barCouncilId, setBarCouncilId] = useState("");
   const [Name, setName] = useState("");
-
+  const navigation = useNavigation();
   const [expertise, setExpertise] = useState("");
   const [experience, setExperience] = useState("");
   const [email, setEmail] = useState("");
@@ -48,7 +49,10 @@ const LawyerRegistration = () => {
         passWord: password,
         confirmpassWord: confirmPassword,
       })
-      .then(() => alert("Sucessful signup!"))
+      .then(() => {
+        alert("Sucessful signup!");
+        navigation.navigate("LawyerHomepage");
+      })
       .catch((err) => console.log("Error", err));
     // GET request
     // fetch("http://10.0.2.2:3001/userProfile")
@@ -81,8 +85,6 @@ const LawyerRegistration = () => {
     // Implement your sign-up logic here
     // Validate inputs, make API calls, etc.
   };
-
-  const navigation = useNavigation();
 
   const handleLoginNavigation = () => {
     // Navigate back to the login page with the user type

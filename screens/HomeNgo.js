@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import Homepage from "./Homepage";
 import Study from "./Study";
 import Ngo from "./Ngo";
 import CaseId from "./CaseId";
+import axios from "axios";
 
 const ngo1 = require("./ngo1.png");
 
@@ -51,6 +52,22 @@ const CategorySelector = ({ categories, onPressCategory }) => {
 const HomeNgo = () => {
   const navigation = useNavigation();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [NGOS, setNGO] = useState([]);
+
+  useEffect(() => {
+    const fetchNGO = async () => {
+      try {
+        const response = await axios.get(
+          "http://192.168.1.215:3001/ngoProfile"
+        );
+        setNGO(response.data);
+      } catch (error) {
+        console.error("Error fetching NGO:", error);
+      }
+    };
+
+    fetchNGO();
+  }, []);
 
   const handleCategoryPress = (item) => {
     // Check if the item has a page property
@@ -121,78 +138,49 @@ const HomeNgo = () => {
         {/* Your content goes here */}
         <View style={styles.content}>
           <View style={styles.profileCardContainer}>
-            {/* Profile Card 1 */}
-            <View style={styles.profileCard}>
-              <Text style={styles.lawyername}>Prayas</Text>
-              <Image
-                style={styles.profileCardImage}
-                source={ngo1}
-                alt="Image placeholder"
-              />
-              <Text style={[styles.boldText, styles.legalclinicText]}>
-                📍 Location:
-              </Text>
-              <Text style={[styles.semiBoldText, styles.legalclinicText]}>
-                Bengaluru
-              </Text>
-              <Text style={[styles.legalclinicText, styles.boldText]}>
-                🕐 Operational Hours:
-              </Text>
-              <Text style={[styles.legalclinicText, styles.semiBoldText]}>
-                10am-5pm
-              </Text>
-              <Text style={[styles.legalclinicText, styles.boldText]}>
-                Services:
-              </Text>
-              <Text style={[styles.legalclinicText, styles.semiBoldText]}>
-                Social Service, educational Training
-              </Text>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => navigation.navigate(Ngo)}
-                >
-                  <Text style={styles.buttonText}>Book Appointment</Text>
-                </TouchableOpacity>
+            {NGOS.map((n, index) => (
+              <View style={styles.profileCard} key={n.id}>
+                <Text style={styles.lawyername}>{n.name}</Text>
+                <Image
+                  style={styles.profileCardImage}
+                  source={ngo1} // Assuming all images are the same for now
+                  alt="Image placeholder"
+                />
+                <Text style={[styles.boldText, styles.legalclinicText]}>
+                  📍 Location:
+                </Text>
+                <Text style={[styles.semiBoldText, styles.legalclinicText]}>
+                  {n.location}
+                </Text>
+                <Text style={[styles.legalclinicText, styles.boldText]}>
+                  Email:
+                </Text>
+                <Text style={[styles.legalclinicText, styles.semiBoldText]}>
+                  {n.email}
+                </Text>
+                <Text style={[styles.legalclinicText, styles.boldText]}>
+                  Services:
+                </Text>
+                <Text style={[styles.legalclinicText, styles.semiBoldText]}>
+                  {n.services}
+                </Text>
+                <Text style={[styles.legalclinicText, styles.boldText]}>
+                  Phone Number:
+                </Text>
+                <Text style={[styles.legalclinicText, styles.semiBoldText]}>
+                  {n.contactNumber}
+                </Text>
+
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate(Ngo)}
+                  >
+                    <Text style={styles.buttonText}>Book Appointment</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-            {/* Profile Card 2 */}
-            <View style={styles.profileCard}>
-              <Text style={styles.lawyername}>Law Clinic India</Text>
-              <Image
-                style={styles.profileCardImage}
-                source={ngo2}
-                alt="Image placeholder"
-              />
-              <Text style={[styles.boldText, styles.legalclinicText]}>
-                📍 Location:
-              </Text>
-              <Text style={[styles.semiBoldText, styles.legalclinicText]}>
-                Bengaluru
-              </Text>
-              <Text style={[styles.legalclinicText, styles.boldText]}>
-                🕐 Operational Hours:
-              </Text>
-              <Text style={[styles.legalclinicText, styles.semiBoldText]}>
-                10am-5pm
-              </Text>
-              <Text style={[styles.legalclinicText, styles.boldText]}>
-                Services:
-              </Text>
-              <Text style={[styles.legalclinicText, styles.semiBoldText]}>
-                Social Service, educational Training
-              </Text>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => navigation.navigate(Ngo)}
-                >
-                  <Text style={styles.buttonText}>Book Appointment</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            {/* Rest of your content */}
-            {/* ... */}
+            ))}
           </View>
         </View>
       </ScrollView>
@@ -346,7 +334,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   profileCard: {
-    width: "47.5%",
+    width: "49%",
     padding: 5,
     borderWidth: 2,
     borderColor: "#1A3567",
@@ -357,8 +345,11 @@ const styles = StyleSheet.create({
   },
   profileCardImage: {
     width: 90,
-    height: 90,
+    height: 50,
     alignSelf: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     borderRadius: 50,
   },
   lawyername: {

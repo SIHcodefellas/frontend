@@ -10,8 +10,9 @@ import {
   ScrollView,
 } from "react-native";
 // import { ScrollView } from 'react-native-gesture-handler';
-// import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import Homepage from "./Homepage";
 
 const UTPRegistration = () => {
   const [caseId, setCaseId] = useState("");
@@ -23,7 +24,7 @@ const UTPRegistration = () => {
   const [location, setLocation] = useState("");
   const [lawyerName, setLawyerName] = useState("");
   const [offence, setOffence] = useState("");
-
+  const navigation = useNavigation();
   const handleSignUp = () => {
     // Check if the password matches the confirmed password
     if (password !== confirmPassword) {
@@ -46,9 +47,11 @@ const UTPRegistration = () => {
         lawyerName,
         offence,
       })
-      .then(() => alert("Sucessful signup!"))
+      .then(() => {
+        alert("Successful signup!");
+        navigation.navigate("Homepage");
+      })
       .catch((err) => console.log("Error", err));
-
     // Implement your sign-up logic here
     // Validate inputs, make API calls, etc.
   };

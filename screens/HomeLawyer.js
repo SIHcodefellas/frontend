@@ -1,29 +1,34 @@
-// HomeLawyer.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
+  TextInput,
   TouchableOpacity,
   ScrollView,
   FlatList,
-  TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import profileimage from "./profileimage.png";
+import IndiraJaising from "./circleimage1.png";
 import NotificationPage from "./NotificationPage";
-import Menu from "./Menu";
 import { useNavigation } from "@react-navigation/native";
-import MyComponent from "./law";
-import Wellbeing from "./Wellbeing";
-import Homepage from "./Homepage";
-import Dashboard from "./Dashboard";
+import Menu from "./Menu";
 import Study from "./Study";
+import Wellbeing from "./Wellbeing";
+import Dashboard from "./Dashboard";
+import MyComponent from "./law";
+import HomeNgo from "./HomeNgo";
 import CaseId from "./CaseId";
-const CategorySelector = ({ categories, onPressCategory }) => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+import Homepage from "./Homepage";
+import axios from "axios";
 
+const CategorySelector = ({
+  categories,
+  selectedCategory,
+  onPressCategory,
+}) => {
   return (
     <FlatList
       data={categories}
@@ -44,20 +49,37 @@ const CategorySelector = ({ categories, onPressCategory }) => {
     />
   );
 };
-const HomeLawyer = () => {
+
+const HomeLawyer = ({ route }) => {
   const navigation = useNavigation();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [lawyers, setLawyers] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  useEffect(() => {
+    const fetchLawyers = async () => {
+      try {
+        const response = await axios.get(
+          "http://192.168.1.215:3001/userProfile"
+        );
+        setLawyers(response.data);
+      } catch (error) {
+        console.error("Error fetching lawyers:", error);
+      }
+    };
+
+    fetchLawyers();
+  }, []);
 
   const handleCategoryPress = (item) => {
-    // Check if the item has a page property
+    setSelectedCategory(item.id);
     if (item.page) {
-      // Navigate to the specified page
       navigation.navigate(item.page);
     } else {
       // Handle other logic if needed
     }
   };
-  // Function to toggle the visibility of the menu
+
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -71,9 +93,11 @@ const HomeLawyer = () => {
     { id: 6, name: "NGO's", page: "HomeNgo" },
   ];
 
+  // Extracting parameters passed from LawyerRegistration
+  const { name, expertise, experience, email } = route.params || {};
+
   return (
     <View style={styles.container}>
-      {/* Top bar with icons */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={toggleMenu}>
           <Ionicons
@@ -84,17 +108,15 @@ const HomeLawyer = () => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Ionicons
-            onPress={() => navigation.navigate(NotificationPage)}
-            name="notifications-outline"
-            size={30}
-            color="black"
-            style={[styles.icon, { marginTop: 30 }]}
-          />
-        </TouchableOpacity>
+        <Ionicons
+          onPress={() => navigation.navigate(NotificationPage)}
+          name="notifications-outline"
+          size={30}
+          color="black"
+          style={[styles.icon, { marginTop: 30 }]}
+        />
       </View>
-      {/* Search bar and filter button */}
+
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -106,58 +128,55 @@ const HomeLawyer = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Category Selector moved to a new parent View */}
       <View>
-        {/* Category Selector */}
         <CategorySelector
           categories={categories}
+          selectedCategory={selectedCategory}
           onPressCategory={handleCategoryPress}
         />
       </View>
 
-      {/* Scrollable content area */}
       <ScrollView style={styles.scrollView}>
-        {/* Your content goes here */}
         <View style={styles.content}>
           <View style={styles.profileCardContainer}>
-            {/* Profile Card 1 */}
-            <View style={styles.profileCard}>
-              <Text style={styles.lawyername}>Arnav Khochare</Text>
-              <Image
-                style={styles.profileCardImage}
-                source={profileimage}
-                alt="Image placeholder"
-              />
-
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => navigation.navigate(MyComponent)}
-                >
+            {lawyers.map((lawyer) => (
+              <TouchableOpacity
+                key={lawyer._id}
+                style={styles.profileCard}
+                onPress={() => {
+                  navigation.navigate(MyComponent, { lawyerData: lawyer });
+                  console.log(lawyer);
+                }}
+              >
+                <Text style={styles.lawyername}>{lawyer.name}</Text>
+                <Image
+                  style={styles.profileCardImage}
+                  source={profileimage}
+                  alt="Image placeholder"
+                />
+                <View style={styles.buttonContainer}>
                   <Text style={[styles.boldText, styles.lawyerText]}>
                     Years of Experience:
                   </Text>
-                  <Text style={styles.semiBoldText}>22</Text>
+                  <Text style={styles.semiBoldText}>{lawyer.experience}</Text>
                   <Text style={[styles.boldText, styles.lawyerText]}>
                     Subject Matter Expertise:
                   </Text>
-                  <Text style={styles.semiBoldText}>Criminal Cases</Text>
-                  <Text style={[styles.boldText, styles.lawyerText]}>
-                    Sucess Rate:
+                  <Text style={styles.semiBoldText}>
+                    {lawyer.specialization}
                   </Text>
-                  <Text style={styles.semiBoldText}>70%</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            {/* Rest of your content */}
-            {/* ... */}
+                  <Text style={[styles.boldText, styles.lawyerText]}>
+                    Email:
+                  </Text>
+                  <Text style={styles.semiBoldText}>{lawyer.email}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
       </ScrollView>
 
-      {/* Fixed navigation bar at the bottom */}
       <View style={styles.navigationBar}>
-        {/* Navigation icons */}
         <View style={styles.navIconsContainer}>
           <TouchableOpacity>
             <View style={styles.navIconWrapper}>
@@ -172,40 +191,16 @@ const HomeLawyer = () => {
               <Text style={styles.navLabel}>Home</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(CaseId)}
-              name="apps"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(Study)}
-              name="book"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(Wellbeing)}
-              name="heart"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
+          {/* Add other navigation icons here */}
         </View>
       </View>
-      {menuVisible && <Menu navigation={<HomeLawyer />} onClose={toggleMenu} />}
+
+      {menuVisible && (
+        <Menu navigation={<HomeProbono />} onClose={toggleMenu} />
+      )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -285,18 +280,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  squareSection: {
-    width: "48%", // Adjust as needed
-    height: 0,
-    aspectRatio: 1,
-    backgroundColor: "#B0CCFF", // Change this to your preferred color
-    borderColor: "#1A3567",
-    borderWidth: 3,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
   categoryContainer: {
     paddingHorizontal: 5,
     paddingVertical: 20,

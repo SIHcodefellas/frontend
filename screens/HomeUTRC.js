@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import Study from "./Study";
 import HomeLawyer from "./HomeLawyer";
 import HomeNgo from "./HomeNgo";
 import HomeProbono from "./HomeProbono";
+import axios from "axios";
 import Homelegalclinics from "./Homelegalclinics";
 
 const CategorySelector = ({ categories, onPressCategory }) => {
@@ -47,6 +48,23 @@ const CategorySelector = ({ categories, onPressCategory }) => {
 };
 
 const HomeUTRC = () => {
+  const [utrc, setUTR] = useState([]);
+
+  useEffect(() => {
+    const fetchUTR = async () => {
+      try {
+        const response = await axios.get(
+          "http://192.168.1.215:3001/utrcsProfile"
+        );
+        setUTR(response.data);
+      } catch (error) {
+        console.error("Error fetching utrcs:", error);
+      }
+    };
+
+    fetchUTR();
+  }, []);
+
   const categories = [
     { id: 1, name: "ProBono", page: "HomeProbono" },
     { id: 2, name: "Lawyers", page: "HomeLawyer" },
@@ -111,21 +129,26 @@ const HomeUTRC = () => {
         <View style={styles.content}>
           <View style={styles.profileCardContainer}>
             {/* Profile Card 1 */}
-            <View style={styles.profileCard}>
-              <Text style={styles.lawyername}>NALSA</Text>
-              <Image
-                style={styles.profileCardImage}
-                source={UTRC1}
-                alt="Image placeholder"
-              />
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Book Appointment</Text>
-                </TouchableOpacity>
+            {utrc.map((u) => (
+              <View style={styles.profileCard}>
+                <Text style={styles.lawyername}>{u.name}</Text>
+                <Image
+                  style={styles.profileCardImage}
+                  source={UTRC1}
+                  alt="Image placeholder"
+                />
+                <Text style={styles.lawyername}>{u.location}</Text>
+
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Book Appointment</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
+            ))}
+
             {/* Profile Card 2 */}
-            <View style={styles.profileCard}>
+            {/* <View style={styles.profileCard}>
               <Text style={styles.lawyername}>MPSLSA</Text>
               <Image
                 style={styles.profileCardImage}
@@ -137,7 +160,7 @@ const HomeUTRC = () => {
                   <Text style={styles.buttonText}>Book Appointment</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
             {/* Rest of your content */}
             {/* ... */}
           </View>

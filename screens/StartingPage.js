@@ -2,11 +2,15 @@
 import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import LoginPage from "./LoginPage";
+import UTPRegistration from "./UTPRegistration";
+import ProBonoRegistration from "./ProBonoRegistration";
+import LawyerRegistration from "./LawyerRegistration";
+
 const StartingPage = ({ navigation }) => {
-  // Function to navigate to the selected user type screen
-  const navigateToUserType = (userType) => {
-    navigation.navigate("LoginPage", { userType });
-  };
+  //   // Function to navigate to the selected user type screen
+  //   const navigateToUserType = (userType) => {
+  //     navigation.navigate("LoginPage", { userType });
+  //   };
 
   return (
     <View style={styles.container}>
@@ -15,21 +19,21 @@ const StartingPage = ({ navigation }) => {
       {/* Undertrial Prisoners */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToUserType("UndertrialPrisoners")}
+        onPress={() => navigation.navigate(UTPRegistration)}
       >
         <Text style={styles.buttonText}>Undertrial Prisoner</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToUserType("ProBonoLawyers")}
+        onPress={() => navigation.navigate(ProBonoRegistration)}
       >
         <Text style={styles.buttonText}>ProBono Lawyer</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToUserType("Lawyers")}
+        onPress={() => navigation.navigate(LawyerRegistration)}
       >
         <Text style={styles.buttonText}>Lawyer</Text>
       </TouchableOpacity>
@@ -50,15 +54,21 @@ const StartingPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToUserType("UndertrialReviewCommittee")}
+        onPress={() => navigateToUserType("UTRC")}
       >
         <Text style={styles.buttonText}>Undertrial Review Committee</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigateToUserType("LegalClinics")}
+      >
+        <Text style={styles.buttonText}>Legal Clinics</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
