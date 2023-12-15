@@ -95,7 +95,6 @@ const App = () => {
                 <Stack.Screen name="Homepage" component={Homepage} />
                 <Stack.Screen name="Wellbeing" component={Wellbeing} />
                 <Stack.Screen name="Thoughts" component={Thoughts} />
-                <Stack.Screen name="HomeProbono" component={HomeProbono} />
                 <Stack.Screen name="HomeLawyer" component={HomeLawyer} />
                 <Stack.Screen name="HomeNgo" component={HomeNgo} />
                 <Stack.Screen
@@ -106,6 +105,7 @@ const App = () => {
                     name="NotificationPage"
                     component={NotificationPage}
                 />
+                <Stack.Screen name="HomeProbono" component={HomeProbono} />
                 <Stack.Screen name="MyComponent" component={MyComponent} />
                 <Stack.Screen name="Study" component={Study} />
                 <Stack.Screen name="CourseDetails" component={CourseDetails} />

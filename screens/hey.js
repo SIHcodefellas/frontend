@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     View,
     Text,
@@ -10,57 +10,39 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 const Back = require("./Back.png");
-
-import axios from "axios";
-
 const MyComponent = () => {
-    const route = useRoute();
-    const lawyerId = route.params?.lawyerId;
-    const [lawyerDetails, setLawyerDetails] = useState({});
+    const phoneNumber = "9136279324";
+    const emailAddress = "arnavlegalaid@yahoo.com";
+    const locationAddress = "Kolkata, India";
     const navigation = useNavigation();
-
-    useEffect(() => {
-        const fetchLawyerDetails = async () => {
-            try {
-                const response = await axios.get(
-                    `http://192.168.56.1:3001/userProfile/${lawyerId}`
-                );
-                setLawyerDetails(response.data);
-            } catch (error) {
-                console.error("Error fetching lawyer details:", error);
-            }
-        };
-
-        if (lawyerId) {
-            fetchLawyerDetails();
-        }
-    }, [lawyerId]);
-
     const handleCallPress = () => {
-        Linking.openURL(`tel:${lawyerDetails.phoneNumber}`);
+        Linking.openURL(`tel:${phoneNumber}`);
     };
 
     const handleEmailPress = () => {
-        Linking.openURL(`mailto:${lawyerDetails.email}`);
+        Linking.openURL(`mailto:${emailAddress}`);
     };
 
     const handleLocationPress = () => {
+        // Open Google Maps with the specified address
         Linking.openURL(
             `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                lawyerDetails.location
+                locationAddress
             )}`
         );
     };
 
     const handleAuthenticPress = () => {
+        // Open the Bar Council of India website
         Linking.openURL("https://main.sci.gov.in/advocates#");
     };
 
     const handleMeetSchedule = () => {
         Linking.openURL("https://calendly.com/miss-riyajaiswal251003/30min");
     };
+
     return (
         <ScrollView>
             <SafeAreaView style={styles.container}>
@@ -76,18 +58,15 @@ const MyComponent = () => {
                         }}
                     />
                     <View style={styles.textContainer}>
-                        <Text style={styles.profileText}>
-                            {lawyerDetails.name}
-                        </Text>
+                        <Text style={styles.profileText}>Arnav khochare</Text>
                         <View></View>
                         <Text style={styles.experienceText}>
-                            Years of Experience: {lawyerDetails.experience}{" "}
-                            years
+                            Years of Experience: 5
                         </Text>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity style={styles.button}>
                                 <Text style={styles.buttonText}>
-                                    {lawyerDetails.specialization}
+                                    Criminal Case
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.button}>
@@ -127,13 +106,11 @@ const MyComponent = () => {
                             size={40}
                             color="red"
                         />
+                        <Text style={styles.locationText}>Kolkata, India</Text>
                     </TouchableOpacity>
-                    <Text style={styles.locationText}>
-                        {lawyerDetails.location}
-                    </Text>
                 </View>
                 <View>
-                    <Text style={styles.ConHeader}>Contact</Text>
+                    <Text style={styles.ConHeader}>Contact Details</Text>
                     <View style={styles.subdiv}>
                         <TouchableOpacity
                             style={styles.callContainer}
@@ -145,7 +122,7 @@ const MyComponent = () => {
                                 color="black"
                             />
                             <Text style={styles.CallText}>
-                                {lawyerDetails.phoneNumber}
+                                9136279324 / 92300987***
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -158,7 +135,7 @@ const MyComponent = () => {
                                 color="black"
                             />
                             <Text style={styles.CallText}>
-                                {lawyerDetails.email}
+                                arnavlegalaid@yahhoo.com
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -172,7 +149,6 @@ const MyComponent = () => {
                         </Text>
                     </TouchableOpacity>
                 </View>
-
                 <Text style={styles.ConHeader}>User reviews</Text>
                 <View style={styles.subdiv2}>
                     <View style={styles.callContainer}>
@@ -235,7 +211,6 @@ const styles = StyleSheet.create({
     profileText: {
         fontSize: 18,
         fontWeight: "bold",
-        marginTop: 20,
     },
     experienceText: {
         fontSize: 16,
