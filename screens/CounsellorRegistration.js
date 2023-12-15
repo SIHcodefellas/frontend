@@ -27,11 +27,11 @@ const CounsellorRegistration = () => {
       return;
     }
     axios
-      .get("http://192.168.1.215:3001/counselorProfile")
+      .get("http://192.168.0.104:3001/counselorProfile")
       .then((res) => console.log(res))
       .catch((err) => console.log("error", err));
     axios
-      .post("http://192.168.1.215:3001/counselorProfile", {
+      .post("http://192.168.0.104:3001/counselorProfile", {
         ncsID: ncsId,
         experience: experience,
         email: email,
