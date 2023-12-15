@@ -171,6 +171,22 @@ app.get("/userProfile", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+// Example backend route
+app.get("/userProfile/:lawyerId", async (req, res) => {
+  const lawyerId = req.params.lawyerId;
+
+  // Use lawyerId to query the database and send the lawyer details in the response
+  // Replace the following line with your actual database query
+  const lawyerDetails = await LawyerModel.findById(lawyerId);
+
+  if (!lawyerDetails) {
+    return res.status(404).json({ error: "Lawyer not found" });
+  }
+
+  // Send the lawyer details in the response
+  res.json(lawyerDetails);
+});
+
 // Define UTP schema outside the route handler
 const utpSchema = new mongoose.Schema({
   // Define your UTP schema fields here
@@ -207,22 +223,6 @@ const utpSchema = new mongoose.Schema({
   offence: {
     type: String,
   },
-  custodyFirstDate: {
-    type: String,
-  },
-
-  courtStatus: {
-    type: String,
-  },
-  assignedLawyer: {
-    type: String,
-  },
-  court: {
-    type: String,
-  },
-  judge: {
-    type: String,
-  },
 });
 
 const UTPModel = mongoose.model("UTP", utpSchema);
@@ -238,11 +238,6 @@ app.post("/utpProfile", async (req, res) => {
       location,
       lawyerName,
       offence,
-      custodyFirstDate,
-      courtStatus,
-      assignedLawyer,
-      court,
-      judge,
     } = req.body;
 
     const utp = new UTPModel({
@@ -255,11 +250,6 @@ app.post("/utpProfile", async (req, res) => {
       location,
       lawyerName,
       offence,
-      custodyFirstDate,
-      courtStatus,
-      assignedLawyer,
-      court,
-      judge,
     });
 
     await utp.save();
