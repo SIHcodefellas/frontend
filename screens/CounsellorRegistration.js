@@ -40,7 +40,10 @@ const CounsellorRegistration = () => {
         contactNumber: contactNumber,
         location: location,
       })
-      .then(() => alert("Sucessful signup!"))
+      .then(() => {
+        alert("Sucessful signup!");
+        navigation.navigate("CounsellorHomepage");
+      })
       .catch((err) => console.log("Error", err));
     // Implement your sign-up logic here
     // Validate inputs, make API calls, etc.

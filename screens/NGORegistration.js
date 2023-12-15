@@ -10,6 +10,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import NgoHomepage from "./NgoHomepage";
 
 const NGORegistration = () => {
   const [darpanId, setDarpanId] = useState("");
@@ -44,7 +45,10 @@ const NGORegistration = () => {
         services: services,
         yearsOfExperience: experience,
       })
-      .then(() => alert("Sucessful signup!"))
+      .then(() => {
+        alert("Sucessful signup!");
+        navigation.navigate("NgoHomepage");
+      })
       .catch((err) => console.log("Error", err));
 
     // Implement your sign-up logic here

@@ -12,6 +12,10 @@ import ProBonoRegistration from "./ProBonoRegistration";
 import LawyerRegistration from "./LawyerRegistration";
 import CounsellorRegistration from "./CounsellorRegistration";
 import NGORegistration from "./NGORegistration";
+import Homepage from "./Homepage";
+import LawyerHomepage from "./LawyerHomepage";
+import CounsellorHomepage from "./CounsellorHomepage";
+import NgoHomepage from "./NgoHomepage";
 const LoginPage = ({ route, navigation }) => {
   // Extracting user type from route.params
   const { userType } = route.params;
@@ -19,6 +23,22 @@ const LoginPage = ({ route, navigation }) => {
   // Function to handle login
   const handleLogin = () => {
     // Implement your login logic here
+    switch (userType) {
+      case "UndertrialPrisoners":
+        navigation.navigate(Homepage);
+      case "ProBonoLawyers":
+        navigation.navigate(LawyerHomepage);
+      case "Lawyers":
+        navigation.navigate(LawyerHomepage);
+      case "Counsellors":
+        navigation.navigate(CounsellorHomepage);
+      case "NGOs":
+        navigation.navigate(NgoHomepage);
+      // case "UndertrialReviewCommittee":
+      //   return "Welcome, Advocate for Fairness!";
+      default:
+        return "Welcome!";
+    }
   };
 
   // Dynamic welcome text based on user type

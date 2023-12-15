@@ -43,100 +43,101 @@ import LawyerHomepage from "./screens/LawyerHomepage";
 import Lawyersubscription from "./screens/Lawyersubscription";
 // import LawyerDashboard from "./screens/LawyerDashboard";
 import Lawyersearchpage from "./screens/Lawyersearchpage";
+import ViewAllClients from "./screens/ViewAllClients";
+import CounsellorHomepage from "./screens/CounsellorHomepage";
+import CounsellorDashboard from "./screens/CounsellorDashboard";
+import Counsellorsearchpage from "./screens/Counsellorsearchpage";
+import SchedulePage from "./screens/SchedulePage";
+import NgoHomepage from "./screens/NgoHomepage";
 const Stack = createStackNavigator();
 
 //mport CourseDetails from "./components/CourseDetails";
 
 const App = () => {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="ProfilePage" component={ProfilePage} />
-                <Stack.Screen
-                    name="Lawyersubscription"
-                    component={Lawyersubscription}
-                />
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
+        <Stack.Screen
+          name="Lawyersubscription"
+          component={Lawyersubscription}
+        />
+        <Stack.Screen
+          name="CounsellorHomepage"
+          component={CounsellorHomepage}
+        />
+        <Stack.Screen
+          name="CounsellorDashboard"
+          component={CounsellorDashboard}
+        />
 
-                <Stack.Screen name="Animation" component={Animation} />
-                <Stack.Screen name="StartingPage" component={StartingPage} />
-                <Stack.Screen
-                    name="LawyerRegistration"
-                    component={LawyerRegistration}
-                />
-                <Stack.Screen
-                    name="LawyerHomepage"
-                    component={LawyerHomepage}
-                />
-                <Stack.Screen
-                    name="CounsellorRegistration"
-                    component={CounsellorRegistration}
-                />
+        <Stack.Screen name="SchedulePage" component={SchedulePage} />
+        <Stack.Screen
+          name="Counsellorsearchpage"
+          component={Counsellorsearchpage}
+        />
+        <Stack.Screen name="NgoHomepage" component={NgoHomepage} />
 
-                <Stack.Screen name="LoginPage" component={LoginPage} />
-                <Stack.Screen name="SignupPage" component={SignupPage} />
+        <Stack.Screen name="Animation" component={Animation} />
+        <Stack.Screen name="StartingPage" component={StartingPage} />
+        <Stack.Screen
+          name="LawyerRegistration"
+          component={LawyerRegistration}
+        />
+        <Stack.Screen name="LawyerHomepage" component={LawyerHomepage} />
+        <Stack.Screen
+          name="CounsellorRegistration"
+          component={CounsellorRegistration}
+        />
 
-                <Stack.Screen
-                    name="NGORegistration"
-                    component={NGORegistration}
-                />
-                <Stack.Screen
-                    name="UTPRegistration"
-                    component={UTPRegistration}
-                />
-                <Stack.Screen
-                    name="UTRCRegistration"
-                    component={UTRCRegistration}
-                />
-                <Stack.Screen
-                    name="LegalClinicRegistration"
-                    component={LegalClinicRegistration}
-                />
+        <Stack.Screen name="LoginPage" component={LoginPage} />
+        <Stack.Screen name="SignupPage" component={SignupPage} />
 
-                <Stack.Screen name="Homepage" component={Homepage} />
-                <Stack.Screen name="Wellbeing" component={Wellbeing} />
-                <Stack.Screen name="Thoughts" component={Thoughts} />
-                <Stack.Screen name="HomeLawyer" component={HomeLawyer} />
-                <Stack.Screen name="HomeNgo" component={HomeNgo} />
-                <Stack.Screen
-                    name="Homelegalclinics"
-                    component={Homelegalclinics}
-                />
-                <Stack.Screen
-                    name="NotificationPage"
-                    component={NotificationPage}
-                />
-                <Stack.Screen name="HomeProbono" component={HomeProbono} />
-                <Stack.Screen name="MyComponent" component={MyComponent} />
-                <Stack.Screen name="Study" component={Study} />
-                <Stack.Screen name="CourseDetails" component={CourseDetails} />
-                <Stack.Screen name="CaseId" component={CaseId} />
-                <Stack.Screen name="Dashboard" component={Dashboard} />
-                <Stack.Screen name="HomeUTRC" component={HomeUTRC} />
-                <Stack.Screen name="Ngo" component={Ngo} />
-                <Stack.Screen name="CommentScreen" component={CommentScreen} />
-                {/* Rajeshwari codes */}
-                <Stack.Screen name="Role" component={Role} />
-                <Stack.Screen name="utpData" component={utpData} />
-                <Stack.Screen name="ngoData" component={ngoData} />
-                <Stack.Screen
-                    name="counsellorData"
-                    component={counsellorData}
-                />
-                <Stack.Screen name="probonoData" component={probonoData} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Screen name="NGORegistration" component={NGORegistration} />
+        <Stack.Screen name="UTPRegistration" component={UTPRegistration} />
+        <Stack.Screen name="UTRCRegistration" component={UTRCRegistration} />
+        <Stack.Screen
+          name="LegalClinicRegistration"
+          component={LegalClinicRegistration}
+        />
 
-        // <MyComponent />
-        //<Ngo />
-        // <Study />
-        // <Menu />
-        // <Thoughts />
-        // <Wellbeing />
-        //<CourseDetails />
-        // <Homepage />
-        // <NotificationPage />
-        // <HomeProbono />
-    );
+        <Stack.Screen name="Homepage" component={Homepage} />
+        <Stack.Screen name="Wellbeing" component={Wellbeing} />
+        <Stack.Screen name="Thoughts" component={Thoughts} />
+        <Stack.Screen name="HomeProbono" component={HomeProbono} />
+        <Stack.Screen name="HomeLawyer" component={HomeLawyer} />
+        <Stack.Screen name="HomeNgo" component={HomeNgo} />
+        <Stack.Screen name="Homelegalclinics" component={Homelegalclinics} />
+        <Stack.Screen name="NotificationPage" component={NotificationPage} />
+        <Stack.Screen name="MyComponent" component={MyComponent} />
+        <Stack.Screen name="Study" component={Study} />
+        <Stack.Screen name="CourseDetails" component={CourseDetails} />
+        <Stack.Screen name="CaseId" component={CaseId} />
+        <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="HomeUTRC" component={HomeUTRC} />
+        <Stack.Screen name="Ngo" component={Ngo} />
+        <Stack.Screen name="CommentScreen" component={CommentScreen} />
+        {/* Rajeshwari codes */}
+        <Stack.Screen name="Role" component={Role} />
+        <Stack.Screen name="utpData" component={utpData} />
+        <Stack.Screen name="ngoData" component={ngoData} />
+        <Stack.Screen name="counsellorData" component={counsellorData} />
+        <Stack.Screen name="probonoData" component={probonoData} />
+        <Stack.Screen name="ViewAllClients" component={ViewAllClients} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
+    // <MyComponent />
+    //<Ngo />
+    // <Study />
+    // <Menu />
+    // <Thoughts />
+    // <Wellbeing />
+    //<CourseDetails />
+    // <Homepage />
+    // <NotificationPage />
+    // <HomeProbono />
+  );
 };
 
 export default App;

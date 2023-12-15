@@ -27,12 +27,12 @@ const counsellorData = () => {
       return;
     }
     axios
-      .get("http://192.168.118.242:3001/counselorProfile")
+      .get("http://192.168.1.215:3001/counselorProfile")
       .then((res) => console.log(res))
       .catch((err) => console.log("Error", err));
 
     axios
-      .post("http://192.168.118.242:3001/counselorProfile", {
+      .post("http://192.168.1.215:3001/counselorProfile", {
         ncsID: ncsId,
         experience: experience,
         email: email,
@@ -118,7 +118,6 @@ const counsellorData = () => {
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
-
       </View>
     </ScrollView>
   );

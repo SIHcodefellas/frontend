@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   Text,
   ScrollView,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar, LocaleConfig } from "react-native-calendars";
-// import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from "@react-navigation/native"; // Import the navigation hook
 import { Bullet } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
-import HomeNgo from "./HomeNgo";
-import Homepage from "./Homepage";
-import Wellbeing from "./Wellbeing";
-import Study from "./Study";
-import Menu from "./Menu";
-import NotificationPage from "./NotificationPage";
+import SchedulePage from "./SchedulePage";
+import axios from "axios";
+import CounsellorHomepage from "./CounsellorHomepage";
+const profileimage = require("./download.png");
 
 LocaleConfig.locales["en"] = {
   monthNames: [
@@ -61,18 +59,14 @@ LocaleConfig.locales["en"] = {
 
 LocaleConfig.defaultLocale = "en";
 
-const Dashboard = ({ route }) => {
-  console.log(route);
-  const { params: { caseID = "" } = {} } = route || {};
+const CounsellorDashboard = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [uploadedDocument, setUploadedDocument] = useState(null);
   const navigation = useNavigation();
-  const [menuVisible, setMenuVisible] = useState(false);
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
+
   const onDayPress = (day) => {
     // Handle the selected date
+    navigation.navigate("SchedulePage", { selectedDate: day.dateString });
     setSelectedDate(day.dateString);
   };
 
@@ -92,13 +86,28 @@ const Dashboard = ({ route }) => {
     </View>
   );
 
+  const [utps, setutps] = useState([]);
+  useEffect(() => {
+    const fetchutps = async () => {
+      try {
+        const response = await axios.get(
+          "http://192.168.0.104:3001/utpProfile"
+        );
+        setutps(response.data);
+      } catch (error) {
+        console.error("Error fetching utps:", error);
+      }
+    };
+
+    fetchutps();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* Top bar with icons */}
       <View style={styles.topBar}>
         <TouchableOpacity>
           <Ionicons
-            onPress={toggleMenu}
             name="menu-outline"
             size={30}
             color="black"
@@ -107,7 +116,6 @@ const Dashboard = ({ route }) => {
         </TouchableOpacity>
         <TouchableOpacity>
           <Ionicons
-            onPress={() => navigation.navigate(NotificationPage)}
             name="notifications-outline"
             size={30}
             color="black"
@@ -118,14 +126,12 @@ const Dashboard = ({ route }) => {
 
       <Text style={styles.Dashboard}>Dashboard</Text>
 
-      <Text style={styles.caseid}>Case ID:{route.params.params.caseID}</Text>
-
       {/* ScrollView with white background */}
       <ScrollView style={styles.scrollView}>
         {/* First view with Calendar */}
         <View>
           <View style={styles.calendarView}>
-            <Text style={styles.courtScheduleText}>Court Schedule</Text>
+            <Text style={styles.courtScheduleText}>Your Schedule</Text>
             <Calendar
               style={styles.calendar}
               onDayPress={onDayPress}
@@ -136,65 +142,31 @@ const Dashboard = ({ route }) => {
 
         {/* Second view with Overview */}
         <View style={styles.overviewView}>
-          <Text style={styles.overviewHeader}>Overview</Text>
-          <Text style={styles.normalText}>
-            <Text style={styles.boldText}>Custody Date:</Text> October 15, 2022
-          </Text>
-          <Text style={styles.normalText}>
-            <Text style={styles.boldText}>Days in Detention:</Text> 60 Days
-          </Text>
-          <Text style={styles.normalText}>
-            <Text style={styles.boldText}>Next Court Date:</Text> December 19,
-            2022
-          </Text>
-          <Text style={styles.normalText}>
-            <Text style={styles.boldText}>Court Status:</Text> Under Review
-          </Text>
-        </View>
+          <Text style={styles.overviewHeader}>Your current clients</Text>
+          <View style={styles.squareSectionsContainer}>
+            {utps.slice(0, 5).map((utp) => (
+              <TouchableOpacity
+                key={utp._id}
+                style={styles.squareSection}
+                onPress={() => {
+                  navigation.navigate({ utpData: utp });
+                  // console.log(utp);
+                }}
+              >
+                <Image
+                  style={styles.squareSectionImage}
+                  source={profileimage}
+                  alt="Image placeholder"
+                />
+                <Text style={styles.name}>{`Name: ${utp.name}`}</Text>
+                <Text>{`Offence: ${utp.offence}`}</Text>
 
-        {/* Third view for Upload Legal Documents */}
-        <View style={styles.uploadDocumentsView}>
-          <Text style={styles.uploadDocumentsHeader}>
-            Upload Legal Documents
-          </Text>
-          <TouchableOpacity onPress={handleUploadDocument}>
-            <View style={styles.uploadButton}>
-              <Text style={styles.uploadButtonText}>
-                Click to Upload Document
-              </Text>
-            </View>
-          </TouchableOpacity>
-          {uploadedDocument && (
-            <View style={styles.uploadedDocumentView}>
-              <Text style={styles.uploadedDocumentText}>
-                {uploadedDocument}
-              </Text>
-              {/* You can add an icon or additional styling here */}
-            </View>
-          )}
-        </View>
-
-        {/* Fourth view with Lawyer & Court Details */}
-        <View style={styles.lawyerCourtDetailsView}>
-          <Text style={styles.sectionHeader}>Lawyer & Court Details</Text>
-          <Text style={styles.normalText}>
-            <Text style={styles.boldText}>Assigned Lawyer:</Text> Ram Jethmalani
-          </Text>
-          <Text style={styles.normalText}>
-            <Text style={styles.boldText}>Court:</Text> Supreme Court Of India
-          </Text>
-          <Text style={styles.normalText}>
-            <Text style={styles.boldText}>Judge:</Text> Hon'ble Justice Ashok
-            Bhushan
-          </Text>
-        </View>
-
-        {/* Fifth view with Case History */}
-        <View style={styles.caseHistoryView}>
-          <Text style={styles.sectionHeader}>Case History</Text>
-          <Bullet text="Nov 5, 2022: Case Registration" />
-          <Bullet text="Nov 20, 2022: First Hearing" />
-          <Bullet text="Dec 5, 2022: Evidence Submission" />
+                <TouchableOpacity style={styles.checkDetailsButton}>
+                  <Text style={styles.checkDetailsText}>Check Details</Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </ScrollView>
 
@@ -202,9 +174,10 @@ const Dashboard = ({ route }) => {
       <View style={styles.navigationBar}>
         {/* Navigation icons */}
         <View style={styles.navIconsContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(CounsellorHomepage)}
+          >
             <Ionicons
-              onPress={() => navigation.navigate(Homepage)}
               name="home"
               size={25}
               color="#1A3567"
@@ -215,37 +188,18 @@ const Dashboard = ({ route }) => {
             <View style={styles.navIconWrapper}>
               <View style={styles.lineAboveIcon} />
               <Ionicons
-                onPress={() => navigation.navigate(Dashboard)}
                 name="apps"
                 size={25}
                 color="#1A3567"
                 style={styles.navIcon}
               />
-              <Text style={styles.navLabel}>Profile</Text>
+              <Text style={styles.navLabel}>Dashboard</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(Study)}
-              name="book"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              onPress={() => navigation.navigate(Wellbeing)}
-              name="heart"
-              size={25}
-              color="#1A3567"
-              style={styles.navIcon}
-            />
-          </TouchableOpacity>
         </View>
+        {/* <SchedulePage selectedDate={selectedDate} /> */}
       </View>
       {/* Add your navigation bar items here */}
-      {menuVisible && <Menu navigation={<Dashboard />} onClose={toggleMenu} />}
     </View>
   );
 };
@@ -270,13 +224,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
-  caseid: {
-    textAlign: "right",
-    marginRight: 20,
-    fontSize: 20,
-    marginBottom: 10,
-    fontWeight: "bold",
-  },
+
   scrollView: {
     flex: 1,
     backgroundColor: "#B0CCFF",
@@ -286,11 +234,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E4EEFF",
     borderRadius: 20,
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "Lightskyblue",
-    borderStyle: "solid",
-    // backgroundColor: "transparent",
-    overflow: "hidden",
   },
   courtScheduleText: {
     fontSize: 20,
@@ -309,11 +252,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E4EEFF",
     borderRadius: 20,
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "Lightskyblue",
-    borderStyle: "solid",
-    // backgroundColor: "transparent",
-    overflow: "hidden",
   },
   overviewHeader: {
     fontSize: 20,
@@ -325,12 +263,10 @@ const styles = StyleSheet.create({
   boldText: {
     fontWeight: "bold",
     fontSize: 17,
-    fontFamily: "interSemiBold",
   },
 
   normalText: {
     fontSize: 17,
-    fontFamily: "interMedium",
   },
 
   uploadDocumentsView: {
@@ -338,11 +274,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E4EEFF",
     borderRadius: 20,
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "Lightskyblue",
-    borderStyle: "solid",
-    // backgroundColor: "transparent",
-    overflow: "hidden",
   },
   uploadDocumentsHeader: {
     fontSize: 20,
@@ -374,18 +305,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#E4EEFF",
     borderRadius: 20,
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "Lightskyblue",
-    borderStyle: "solid",
-    // backgroundColor: "transparent",
-    overflow: "hidden",
   },
   sectionHeader: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
-    fontFamily: "interMedium",
   },
   bulletPoint: {
     marginRight: 5,
@@ -398,11 +323,58 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 10,
     marginBottom: 60,
-    borderWidth: 1,
-    borderColor: "Lightskyblue",
-    borderStyle: "solid",
-    // backgroundColor: "transparent",
-    overflow: "hidden",
+  },
+
+  squareSectionsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingHorizontal: 0,
+    marginTop: 15,
+    marginBottom: 90,
+  },
+  squareSection: {
+    width: "45%",
+    aspectRatio: 1,
+    backgroundColor: "white",
+    borderColor: "#1A3567",
+    borderWidth: 2,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    overflow: "hidden", // Add this line
+    paddingTop: 15,
+    paddingBottom: 15,
+    marginBottom: 15,
+  },
+
+  squareSectionImage: {
+    width: "50%",
+    height: "50%",
+    borderRadius: 80, // Use borderRadius: 50 for a circular image
+    overflow: "hidden", // Add this line
+    marginTop: 15,
+  },
+
+  squareSectionTitle: {
+    color: "#1A3567",
+  },
+
+  // Add these styles to your existing styles object
+  checkDetailsButton: {
+    marginTop: 5,
+    backgroundColor: "#044AC8",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    alignSelf: "stretch",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  checkDetailsText: {
+    color: "white",
+    fontWeight: "bold",
   },
 
   navigationBar: {
@@ -433,4 +405,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-export default Dashboard;
+
+export default CounsellorDashboard;
