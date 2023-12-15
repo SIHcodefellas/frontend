@@ -6,7 +6,8 @@ import UTPRegistration from "./UTPRegistration";
 import ProBonoRegistration from "./ProBonoRegistration";
 import LawyerRegistration from "./LawyerRegistration";
 import CounsellorRegistration from "./CounsellorRegistration";
-
+import LegalClinicRegistration from "./LegalClinicRegisteration";
+import NGORegistration from "./NGORegistration";
 const StartingPage = ({ navigation }) => {
   //   // Function to navigate to the selected user type screen
   //   const navigateToUserType = (userType) => {
@@ -48,7 +49,7 @@ const StartingPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToUserType("NGOs")}
+        onPress={() => navigation.navigate("NGORegistration")}
       >
         <Text style={styles.buttonText}>NGO</Text>
       </TouchableOpacity>
@@ -62,7 +63,7 @@ const StartingPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToUserType("LegalClinics")}
+        onPress={() => navigation.navigate(LegalClinicRegistration)}
       >
         <Text style={styles.buttonText}>Legal Clinics</Text>
       </TouchableOpacity>
