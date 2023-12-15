@@ -5,6 +5,7 @@ import LoginPage from "./LoginPage";
 import UTPRegistration from "./UTPRegistration";
 import ProBonoRegistration from "./ProBonoRegistration";
 import LawyerRegistration from "./LawyerRegistration";
+import CounsellorRegistration from "./CounsellorRegistration";
 
 const StartingPage = ({ navigation }) => {
   //   // Function to navigate to the selected user type screen
@@ -40,7 +41,7 @@ const StartingPage = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToUserType("Counsellors")}
+        onPress={() => navigation.navigate("CounsellorRegistration")}
       >
         <Text style={styles.buttonText}>Counsellor</Text>
       </TouchableOpacity>
