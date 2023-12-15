@@ -207,6 +207,22 @@ const utpSchema = new mongoose.Schema({
   offence: {
     type: String,
   },
+  custodyFirstDate: {
+    type: String,
+  },
+
+  courtStatus: {
+    type: String,
+  },
+  assignedLawyer: {
+    type: String,
+  },
+  court: {
+    type: String,
+  },
+  judge: {
+    type: String,
+  },
 });
 
 const UTPModel = mongoose.model("UTP", utpSchema);
@@ -222,6 +238,11 @@ app.post("/utpProfile", async (req, res) => {
       location,
       lawyerName,
       offence,
+      custodyFirstDate,
+      courtStatus,
+      assignedLawyer,
+      court,
+      judge,
     } = req.body;
 
     const utp = new UTPModel({
@@ -234,6 +255,11 @@ app.post("/utpProfile", async (req, res) => {
       location,
       lawyerName,
       offence,
+      custodyFirstDate,
+      courtStatus,
+      assignedLawyer,
+      court,
+      judge,
     });
 
     await utp.save();
@@ -244,6 +270,17 @@ app.post("/utpProfile", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+app.get("/utpProfile", async (req, res) => {
+  try {
+    const utps = await UTPModel.find();
+    res.json(utps);
+    console.log(utps);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.get("/userProfile", async (req, res) => {
   try {
     const lawyers = await LawyerModel.find();
@@ -254,6 +291,28 @@ app.get("/userProfile", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+//check ID
+app.post("/checkCaseID", async (req, res) => {
+  try {
+    const { caseID } = req.body;
+
+    // Check if caseID already exists
+    const existingUtp = await UTPModel.findOne({ caseID });
+
+    if (existingUtp) {
+      // CaseID already exists, send a response indicating that
+      res.json({ exists: true });
+    } else {
+      // CaseID does not exist
+      res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error("Error checking CaseID:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 //counselor
 const counselorSchema = new mongoose.Schema({
   ncsID: {

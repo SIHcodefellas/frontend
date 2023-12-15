@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 const Back = require("./Back.png");
+import Role from "../screens/Role";
 const MyComponent = () => {
   const phoneNumber = "9136279324";
   const emailAddress = "arnavlegalaid@yahoo.com";
@@ -41,6 +42,11 @@ const MyComponent = () => {
 
   const handleMeetSchedule = () => {
     Linking.openURL("https://calendly.com/miss-riyajaiswal251003/30min");
+  };
+
+  const handleAddRolePress = () => {
+    // Navigate to the "Role" screen
+    navigation.navigate("Role");
   };
 
   return (
@@ -82,6 +88,12 @@ const MyComponent = () => {
                 <Text style={styles.buttonText}>Schedule Meet</Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              style={[styles.button, styles.roleButton]}
+              onPress={handleAddRolePress}
+            >
+              <Text style={styles.buttonText}>Add role</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.locationContainer}>
@@ -198,6 +210,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderRadius: 30,
     marginTop: 10,
+  },
+  roleButton: {
+    backgroundColor: "#CC7722",
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+    borderRadius: 30,
+    marginTop: 10,
+    left: 120,
+    top: -35,
   },
   buttonText: {
     color: "white",

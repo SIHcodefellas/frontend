@@ -13,12 +13,12 @@ import {
   Modal,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Assuming you are using Expo for vector icons
-import Lawyersearchpage from "./Lawyersearchpage";
-import { useNavigation } from "@react-navigation/native";
-import LawyerDashboard from "./LawyerDashboard";
-import Lawyersubscription from "./Lawyersubscription";
 import axios from "axios";
+//import Counsellorsearchpage from './Counsellorsearchpage';
+import { useNavigation } from "@react-navigation/native";
+//import CounsellorDashboard from './CounsellorDashboard';
 const section1Image = require("./download.png");
+const profileimage = require("./download.png");
 
 const handleMenuItemPress = () => {
   Linking.openURL(
@@ -68,7 +68,7 @@ const RectangularSection = ({ title, imageUrl, link }) => {
   );
 };
 
-const LawyerHomepage = ({ route }) => {
+const NgoHomepage = ({ route }) => {
   const { params } = route;
   const searchQuery = params ? params.searchQuery : "";
   const navigation = useNavigation();
@@ -79,9 +79,9 @@ const LawyerHomepage = ({ route }) => {
 
   const [updateDetailsModalVisible, setUpdateDetailsModalVisible] =
     useState(false);
-  const [NextCourtDate, setNextCourtDate] = useState("");
-  const [Court, setCourt] = useState("");
-  const [JudgeName, setJudgeName] = useState("");
+  const [nextCourtDate, setNextCourtDate] = useState("");
+  const [court, setCourt] = useState("");
+  const [judgeName, setJudgeName] = useState("");
 
   const handleUpdateDetailsPress = (squareName) => {
     setUpdateDetailsModalVisible(true);
@@ -89,21 +89,11 @@ const LawyerHomepage = ({ route }) => {
   };
 
   const handleSendUpdateDetails = (squareSectionName) => {
-    axios
-      .post("http://192.168.1.215:3001/utpProfile", {
-        courtStatus: NextCourtDate,
-        court: Court,
-        judge: JudgeName,
-      })
-      .then(() => {
-        alert("Details updated!");
-        navigation.goBack();
-      })
-      .catch((err) => console.log("Error", err));
+    // Handle sending details to the respective square section
     console.log("Sending details:", {
-      NextCourtDate,
-      Court,
-      JudgeName,
+      nextCourtDate,
+      court,
+      judgeName,
     });
 
     // Reset state values
@@ -123,7 +113,7 @@ const LawyerHomepage = ({ route }) => {
 
   const handleSearchPress = () => {
     // Navigate to the page of prisoners or perform any other action
-    navigation.navigate("Lawyersearchpage", { searchQuery });
+    navigation.navigate(Counsellorsearchpage);
   };
 
   const handleFilterPress = () => {
@@ -244,6 +234,20 @@ const LawyerHomepage = ({ route }) => {
     // Add more sections as needed
   ];
 
+  const [utps, setutps] = useState([]);
+  useEffect(() => {
+    const fetchutps = async () => {
+      try {
+        const response = await axios.get("http://192.168.1.215/utpProfile");
+        setutps(response.data);
+      } catch (error) {
+        console.error("Error fetching utps:", error);
+      }
+    };
+
+    fetchutps();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -276,30 +280,41 @@ const LawyerHomepage = ({ route }) => {
         <View style={styles.content}>
           <View>
             <Text style={styles.welcomeText}>
-              Welcome, Lawyer! Explore your cases and notifications here.
+              Welcome, Ngo Worker! Explore your clients and notifications here.
             </Text>
           </View>
           <View style={styles.resourcesHeader}>
-            <Text style={styles.smallheaders2}>Upcoming hearings</Text>
+            <Text style={styles.smallheaders2}>Recent Clients</Text>
             <TouchableOpacity>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.squareSectionsContainer}>
-            <SquareSection
-              image={section1Image}
-              text={"Name: ABCD EFG"}
-              onDetailsUpdatePress={() =>
-                handleUpdateDetailsPress("Name: ABCD EFG")
-              }
-            />
-            <SquareSection
-              image={section1Image}
-              text={"Name: PQRS XYZ"}
-              onDetailsUpdatePress={() =>
-                handleUpdateDetailsPress("Name: PQRS XYZ")
-              }
-            />
+            {utps.slice(0, 2).map((utp) => (
+              <TouchableOpacity
+                key={utp._id}
+                style={styles.squareSection}
+                onPress={() => {
+                  navigation.navigate({ utpData: utp });
+                  console.log(utp);
+                }}
+              >
+                <Image
+                  style={styles.squareSectionImage}
+                  source={profileimage}
+                  alt="Image placeholder"
+                />
+                <Text style={styles.name}>{`Name: ${utp.name}`}</Text>
+                <Text>{`Offence: ${utp.offence}`}</Text>
+
+                <TouchableOpacity
+                  style={styles.checkDetailsButton}
+                  onPress={handleUpdateDetailsPress}
+                >
+                  <Text style={styles.checkDetailsText}>Check profile</Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
           </View>
 
           {/* Header for Chatbot */}
@@ -308,7 +323,7 @@ const LawyerHomepage = ({ route }) => {
             onPress={() => handleMenuItemPress()}
           >
             <Text style={styles.knowYourRightsText}>
-              Learn about undertrial prisoner's rights with our chatbot!
+              Understand and Empathize with your clients with a smart Chatbot
             </Text>
             <Ionicons
               name="chatbox-ellipses-outline"
@@ -366,7 +381,7 @@ const LawyerHomepage = ({ route }) => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate(LawyerDashboard)}
+              onPress={() => navigation.navigate(CounsellorDashboard)}
             >
               <Ionicons
                 name="apps"
@@ -375,52 +390,12 @@ const LawyerHomepage = ({ route }) => {
                 style={styles.navIcon}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(Lawyersubscription)}
-            >
-              <View style={styles.navIconWrapper}>
-                <Ionicons
-                  name="card-outline"
-                  size={25}
-                  color="#1A3567"
-                  style={styles.diamondIcon}
-                />
-              </View>
-            </TouchableOpacity>
           </View>
         </View>
         {/* Add your navigation bar items here */}
       </View>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={filterModalVisible}
-        onRequestClose={() => {
-          setFilterModalVisible(false);
-        }}
-      >
-        <View style={styles.filterModalContainer}>
-          <View style={styles.filterModalContent}>
-            <Text style={styles.modalTitle}>Select Category</Text>
-            <ScrollView>
-              {["Lawyer", "ProBonoLawyer", "Counsellors", "NGOs", "UTCs"].map(
-                (category) => (
-                  <TouchableOpacity
-                    key={category}
-                    style={styles.modalOption}
-                    onPress={() => handleCategorySelect(category)}
-                  >
-                    <Text>{category}</Text>
-                  </TouchableOpacity>
-                )
-              )}
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Update Details Modal */}
+      {/* // Update Details Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -434,20 +409,20 @@ const LawyerHomepage = ({ route }) => {
             <Text style={styles.modalTitle}>Update Details</Text>
             <TextInput
               style={styles.inputField}
-              placeholder="Next court date (Month Date, Year)"
-              value={NextCourtDate}
+              placeholder="Date"
+              value={nextCourtDate}
               onChangeText={(text) => setNextCourtDate(text)}
             />
             <TextInput
               style={styles.inputField}
-              placeholder="Court"
-              value={Court}
+              placeholder="Advice"
+              value={court}
               onChangeText={(text) => setCourt(text)}
             />
             <TextInput
-              style={styles.inputField}
-              placeholder="Judge Name"
-              value={JudgeName}
+              style={styles.textbox}
+              placeholder="Message"
+              value={judgeName}
               onChangeText={(text) => setJudgeName(text)}
             />
             <View style={styles.updateDetailsButtonsContainer}>
@@ -471,7 +446,7 @@ const LawyerHomepage = ({ route }) => {
   );
 };
 
-export default LawyerHomepage;
+export default NgoHomepage;
 
 const styles = StyleSheet.create({
   container: {
@@ -595,10 +570,11 @@ const styles = StyleSheet.create({
   },
 
   squareSectionImage: {
-    width: "70%",
-    height: "70%",
+    width: "60%",
+    height: "60%",
     borderRadius: 80, // Use borderRadius: 50 for a circular image
     overflow: "hidden", // Add this line
+    marginTop: 15,
   },
 
   squareSectionTitle: {
@@ -614,6 +590,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: "stretch",
     alignItems: "center",
+    marginBottom: 5,
   },
   checkDetailsText: {
     color: "white",
@@ -624,7 +601,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     color: "#044AC8",
-    marginTop: 15,
+    marginTop: 25,
   },
   chatbotHeader: {
     flexDirection: "row",
@@ -633,7 +610,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   chatbotIcon: {
-    marginRight: 10,
+    marginHorizontal: 10,
+    marginTop: 20,
   },
 
   latestnewsHeader: {
@@ -752,6 +730,14 @@ const styles = StyleSheet.create({
   },
   inputField: {
     height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+  },
+  textbox: {
+    height: 80, // Adjust the height as needed
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,

@@ -26,10 +26,31 @@ const CaseId = () => {
     setShowCaseIdWindow(false);
   };
 
-  const submitCaseId = () => {
-    // Your submitCaseId logic here
-    console.log("Submitted Case ID:", caseIdInput);
-    navigation.navigate(Dashboard);
+  const submitCaseId = async () => {
+    try {
+      // Check if the CaseID exists
+      const response = await fetch("http://192.168.1.215:3001/checkCaseID", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ caseID: caseIdInput }),
+      });
+
+      const result = await response.json();
+
+      if (result.exists) {
+        // CaseID exists, navigate to the Dashboard
+        console.log("CaseID exists. Navigating to Dashboard.");
+        navigation.navigate("Dashboard", { params: { caseID: caseIdInput } });
+      } else {
+        // CaseID does not exist, show an alert or handle accordingly
+        alert("Case ID not found. Please check and try again.");
+      }
+    } catch (error) {
+      console.error("Error checking CaseID:", error);
+      // Handle errors
+    }
   };
 
   return (
