@@ -90,7 +90,7 @@ const LawyerHomepage = ({ route }) => {
 
   const handleSendUpdateDetails = (squareSectionName) => {
     axios
-      .post("http://192.168.1.215:3001/utpProfile", {
+      .post("http://192.168.143.88:3001/utpProfile", {
         courtStatus: NextCourtDate,
         court: Court,
         judge: JudgeName,

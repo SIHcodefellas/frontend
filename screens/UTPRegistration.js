@@ -32,11 +32,11 @@ const UTPRegistration = () => {
       return;
     }
     axios
-      .get("http://192.168.1.215:3001/utpProfile")
+      .get("http://192.168.143.88:3001/utpProfile")
       .then((res) => console.log(res))
       .catch((err) => console.log("error", err));
     axios
-      .post("http://192.168.1.215:3001/utpProfile", {
+      .post("http://192.168.143.88:3001/utpProfile", {
         caseID: caseId,
         name,
         setPassword: password,
@@ -127,7 +127,6 @@ const UTPRegistration = () => {
         <TextInput
           style={styles.input}
           placeholder="Location"
-          secureTextEntry={true}
           value={location}
           onChangeText={(text) => setLocation(text)}
         />
