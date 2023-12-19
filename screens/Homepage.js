@@ -39,24 +39,17 @@ const SquareSection = ({ image, text }) => {
   );
 };
 
-const RectangularSection = ({ title, imageUrl, link }) => {
-  const handleRectangularPress = () => {
-    // Handle navigation logic here, e.g., open the link
-    Linking.openURL(link);
-  };
-
+const RectangularSection = ({ title, imageUrl, text }) => {
   return (
-    <TouchableOpacity
-      style={styles.rectangularSection}
-      onPress={handleRectangularPress}
-    >
-      <View style={styles.rectangularContainer}>
-        <Image source={{ uri: imageUrl }} style={styles.rectangularImage} />
-        <View style={styles.textContainer}>
-          <Text style={styles.rectangularText}>{title}</Text>
-        </View>
+    <View style={styles.rectangularSection}>
+      <View style={styles.rectangularImageContainer}>
+        <Image source={{ imageUrl }} style={styles.rectangularImage} />
       </View>
-    </TouchableOpacity>
+      <View style={styles.textContainer}>
+        <Text style={styles.rectangularText}>{title}</Text>
+        <Text style={styles.randomOneLiner}>{text}</Text>
+      </View>
+    </View>
   );
 };
 
@@ -105,91 +98,25 @@ const Homepage = () => {
   const handleCirclePress = (page) => {
     navigation.navigate(page);
   };
-  const Data = [
+  const rectangularSectionsData = [
     {
       id: "1",
-      title: "Producing Undertrials To Court Physically...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2023/10/26/750x450_500339-justice-bharati-dangre-and-bombay-hc.webp",
-      link: "https://www.livelaw.in/high-court/bombay-high-court/bombay-high-court-undertrials-court-physically-cumbersome-vc-facility-presence-243535",
+      title: "Undertrials in jail",
+      imageUrl: "./section1.jpg",
+      text: "A random one-liner for Section 1",
     },
     {
       id: "2",
-      title: "Delhi High Court Upholds Restriction On MCOCA...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2023/07/17/500x300_481540-mcoca-inmates-restricted-to-meet-family-members-only-delhi-high-court-upholds-authoritys-verdict.webp",
-      link: "https://www.livelaw.in/high-court/delhi-high-court/delhi-high-court-restriction-mcoca-inmates-family-members-238895",
+      title: "Section 2",
+      imageUrl: "URL_TO_IMAGE_2",
+      text: "A witty remark for Section 2",
     },
     {
       id: "3",
-      title: "Three Undertrial Prisoners Kept Together In Single...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2021/07/18/500x300_396897-balancing-religious-freedoms-with-fundamental-right-to-electricity-calcutta-hc-approves-high-tension-transmission-line-above-the-christian-minority-land.jpeg",
-      link: "https://www.livelaw.in/high-court/calcutta-high-court/calcutta-high-court-solitary-confinement-supreme-court-guidelines-untertrial-prisoners-235010",
+      title: "Section 3",
+      imageUrl: "URL_TO_IMAGE_3",
+      text: "Some clever text for Section 3",
     },
-    {
-      id: "4",
-      title: '"Issues Of Undertrials Standing Stubborn Against..."',
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2022/11/11/500x300_443732-justice-farjand-ali-rajasthan-high-court.jpg",
-      link: "https://www.livelaw.in/news-updates/issues-undertrials-standing-stubborn-against-face-democracy-rajasthan-hc-grants-bail-ndpsaccused-jail-6yrs-213854",
-    },
-    {
-      id: "5",
-      title: "UAPA- Period Of Deprivation Of Personal Liberty...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2021/09/10/500x300_400334-justice-ajay-rastogi-and-justice-abhay-s.jpg",
-      link: "https://www.livelaw.in/top-stories/supreme-court-bail-uapa-deprivation-personal-liberty-186727",
-    },
-    {
-      id: "6",
-      title: "'There Is No End To These Demands': Delhi High...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2020/05/11/500x300_374596-prison-jail-prisoner.jpg",
-      link: "https://www.livelaw.in/news-updates/delhi-high-court-not-inclined-to-increase-mulaqaat-days-of-jail-inmates-delhi-prison-rule-185077",
-    },
-    {
-      id: "7",
-      title: "Delhi High Court Issues Directions To Ensure That...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2021/08/20/500x300_398964-drt-and-delhi-hc.jpg",
-      link: "https://www.livelaw.in/news-updates/delhi-high-court-directions-custody-undertrial-prisoner-not-extended-mechanically-183895",
-    },
-    {
-      id: "8",
-      title:
-        "Denial Of Voting Rights To Undertrial Prisoners: An Unreasonable And...",
-      imageUrl: "https://www.livelaw.in/h-upload/images/500x300_election.jpg",
-      link: "https://www.livelaw.in/law-firms/law-firm-articles-/voting-rights-undertrial-prisoners-black-robes-legal-183859",
-    },
-    {
-      id: "9",
-      title: '"Whether Guidelines Can Be Extended To UTPs Facing Trial...',
-      imageUrl: "https://www.livelaw.in/h-upload/images/500x300_jails.jpg",
-      link: "https://www.livelaw.in/news-updates/whether-guidelines-extended-utps-facing-trial-offences-not-included-exclusion-clause-delhi-hc-180656",
-    },
-    {
-      id: "10",
-      title: "Undertrial Prisoners Don't Have Right To Dictate Choice Of ...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2021/04/15/500x300_391910-nothing-but-a-clear-abuse-of-process-of-law-supreme-court-quashed-fir.jpg",
-      link: "https://www.livelaw.in/news-updates/jk-hc-undertrial-prisoner-no-right-to-choose-prison-of-choice-177629",
-    },
-    {
-      id: "11",
-      title: "Undertrial Prisoners Charged With Riot Cases, UAPA, PMLA, Etc...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2020/07/24/500x300_378817-chattisgarh-high-court.jpg",
-      link: "https://www.livelaw.in/news-updates/chhattisgarh-high-court-no-interim-bail-undertrial-prisoners-riots-uapa-anti-national-activities-177248",
-    },
-    {
-      id: "12",
-      title: "Convict Awarded Sentence Lesser Than His Period Of...",
-      imageUrl:
-        "https://www.livelaw.in/h-upload/2020/05/11/500x300_374596-prison-jail-prisoner.jpg",
-      link: "https://www.livelaw.in/news-updates/chhattisgarh-high-court-right-to-speedy-trial-convict-sentence-lesser-than-detention-as-undertrial-175964",
-    },
-
     // Add more sections as needed
   ];
 
@@ -295,20 +222,14 @@ const Homepage = () => {
 
           <View style={styles.latestnewsHeader}>
             <Text style={styles.smallheaders2}>Latest News</Text>
-            <TouchableOpacity
-              onPress={() =>
-                Linking.openURL(
-                  "https://www.livelaw.in/tags/undertrial-prisoners"
-                )
-              }
-            >
+            <TouchableOpacity>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
 
           {/* Horizontal scrollable view for rectangular sections */}
           <FlatList
-            data={Data}
+            data={rectangularSectionsData}
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id}
@@ -316,7 +237,7 @@ const Homepage = () => {
               <RectangularSection
                 title={item.title}
                 imageUrl={item.imageUrl}
-                link={item.link}
+                text={item.text}
               />
             )}
           />

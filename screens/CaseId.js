@@ -29,7 +29,7 @@ const CaseId = () => {
   const submitCaseId = async () => {
     try {
       // Check if the CaseID exists
-      const response = await fetch("http://192.168.143.88:3001/checkCaseID", {
+      const response = await fetch("http://192.168.1.215:3001/checkCaseID", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

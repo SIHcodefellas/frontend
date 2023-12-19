@@ -238,7 +238,7 @@ const NgoHomepage = ({ route }) => {
   useEffect(() => {
     const fetchutps = async () => {
       try {
-        const response = await axios.get("http://192.168.143.88/utpProfile");
+        const response = await axios.get("http://192.168.1.215/utpProfile");
         setutps(response.data);
       } catch (error) {
         console.error("Error fetching utps:", error);

@@ -20,11 +20,11 @@ const LegalClinicRegistration = () => {
 
   const handleSignUp = () => {
     axios
-      .get("http://192.168.143.88:3001/legalProfile")
+      .get("http://192.168.1.215:3001/legalProfile")
       .then((res) => console.log(res))
       .catch((err) => console.log("error", err));
     axios
-      .post("http://192.168.143.88:3001/legalProfile", {
+      .post("http://192.168.1.215:3001/legalProfile", {
         name: name,
         operationalHours: operationalHours,
         location: location,

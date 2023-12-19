@@ -29,7 +29,7 @@ const UTRCRegistration = () => {
     }
 
     axios
-      .post("http://192.168.143.88:3001/utrcsProfile", {
+      .post("http://192.168.1.215:3001/utrcsProfile", {
         courtId: courtId,
         name: name,
         password: password,

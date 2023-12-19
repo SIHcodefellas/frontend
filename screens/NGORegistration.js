@@ -30,11 +30,11 @@ const NGORegistration = () => {
       return;
     }
     axios
-      .get("http://192.168.143.88:3001/ngoProfile")
+      .get("http://192.168.1.215:3001/ngoProfile")
       .then((res) => console.log(res))
       .catch((err) => console.log("error", err));
     axios
-      .post("http://192.168.143.88:3001/ngoProfile", {
+      .post("http://192.168.1.215:3001/ngoProfile", {
         name: Name,
         darpanId: darpanId,
         email: email,
